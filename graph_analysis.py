@@ -1,6 +1,9 @@
 import networkx as nx
 import pandas as pd
-import xml.etree.ElementTree as ET
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy.stats import pearsonr
+
 
 class Weighted_Graph:
     def __init__(self):
@@ -152,9 +155,61 @@ class Weighted_Graph:
         for source, neighbors in self.adj_list.items():
             for target, weight in neighbors.items():
                 G.add_edge(source, target, weight=weight)
-        
         return G
     
+    # plotagem primeiro grafico
+    def get_centrality_graphic(graph_threshold, parties, year, threshold):
+        graph_threshold = graph_threshold.to_networkx()
+        betweenness_centrality = nx.betweenness_centrality(graph_threshold)
+        filtered_deputies = [node for node in betweenness_centrality]
+        filtered_centralities = {node: betweenness_centrality[node] for node in filtered_deputies}
+        sorted_centralities = dict(sorted(filtered_centralities.items(), key=lambda item: item[1], reverse=True))
+        plt.bar(sorted_centralities.keys(), sorted_centralities.values())
+        plt.xlabel('Deputados')
+        plt.ylabel('Centralidade')
+        plt.title(f'Medida de Centralidade para Deputados dos partidos {parties}  ({year}, Threshold: {threshold})')
+        plt.xticks(rotation=45, ha='right')
+        plt.tight_layout()
+        plt.savefig(f'./graphics/centralidade_grafico_{year}_{parties}.png')
+        plt.show()
 
+    # plotagem heatmap
+    def get_heatmap(graph_normalized, politician_df, parties, year):
+        diff_centralities_matrix = []
+        nodes = list(graph_normalized.adj_list.keys())
+        
+        # Criar um mapeamento entre os nomes dos políticos e seus partidos
+        politician_to_party = {row['Politician']: row['Party'] for _, row in politician_df.iterrows()}
+        
+        # Ordenar os nós (políticos) por partido e, em seguida, por nome
+        nodes.sort(key=lambda node: politician_to_party.get(node, ''))
 
-            
+        for dep1 in nodes:
+            row = []
+            for dep2 in nodes:
+                if graph_normalized.there_is_edge(dep1, dep2):
+                    diff = graph_normalized.adj_list[dep1][dep2]
+                    row.append(diff)
+                else:
+                    row.append(0)  # Se não houver conexão, o peso é 0
+            diff_centralities_matrix.append(row)
+        
+        df = pd.DataFrame(diff_centralities_matrix, index=nodes, columns=nodes)
+        
+        plt.figure(figsize=(8, 8))
+        heatmap = sns.heatmap(df, vmin=0, vmax=1, cmap='inferno')
+        
+        # Definir rótulos nos eixos x e y
+        x_labels = [f'{node}-({politician_to_party.get(node, "")})' for node in nodes]
+        y_labels = [f'{node}-({politician_to_party.get(node, "")})' for node in nodes]
+        
+        heatmap.set_xticks(range(len(nodes)))
+        heatmap.set_yticks(range(len(nodes)))
+        heatmap.set_xticklabels(x_labels, rotation=90, ha='center', fontsize=8)
+        heatmap.set_yticklabels(y_labels, rotation=0, ha='right', fontsize=8)
+        
+        plt.title(f'HeatMap dos Pesos Normalizados dos Partidos {parties}, Ano {year}')
+        plt.tight_layout()
+        plt.show()
+
+    
