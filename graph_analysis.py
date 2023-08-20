@@ -181,7 +181,7 @@ class Weighted_Graph:
         plt.xticks(rotation=45, ha='right')
         plt.tight_layout()
         # caso deseje que figura seja salva modifique o diretório caso queira salvar em outro lugar e descomente o trecho
-        # plt.savefig(f'./graphics/centralidade_grafico_{year}_{parties}.png')
+        plt.savefig(f'./graphics/centralidade_grafico_{year}_{parties}.png')
         plt.show()
 
 
@@ -228,11 +228,12 @@ class Weighted_Graph:
         
         plt.title(f'HeatMap dos Pesos Normalizados dos Partidos {parties}, Ano {year}')
         plt.tight_layout()
+        plt.savefig(f'./graphics/heatmap_{year}_{parties}.png')
         plt.show()
 
 
     # gerar grafo de acordo com o partido de cada politico
-    def draw_weighted_graph(weighted_graph, politician_df):
+    def draw_weighted_graph(weighted_graph, politician_df, year, parties):
         G = nx.Graph()
 
         for node1 in weighted_graph.adj_list:
@@ -266,6 +267,7 @@ class Weighted_Graph:
         plt.title('Visualização do Grafo Ponderado de Relações de Votos entre Deputados por Partido')
         plt.legend(handles=legend_labels, loc='upper right')
         plt.tight_layout()
+        plt.savefig(f'./graphics/grafo_{year}_{parties}.png')
         plt.show()
 
 

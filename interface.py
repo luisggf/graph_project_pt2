@@ -47,6 +47,8 @@ class GraphInterface:
         plot_button_style = {"font": ("Helvetica", 14, "bold"), "bg": "#4CAF50", "fg": "white"}
         self.plot_button = tk.Button(root, text="Plotar", command=self.plot_graph, **plot_button_style)
         self.plot_button.pack(anchor=tk.W, padx=5, pady=8)
+        self.success_label = tk.Label(root, text="", fg="green", **label_style)
+        self.success_label.pack(anchor=tk.W, padx=5)
         
 
 
@@ -87,7 +89,9 @@ class GraphInterface:
             if self.heatmap_var.get() == 1:
                 graph_normalized.get_heatmap(df2, parties, year)
             if self.graph_var.get() == 1:
-                graph_threshold.draw_weighted_graph(df2)
-            
+                graph_threshold.draw_weighted_graph(df2, year, parties)
+
+            self.success_label.config(text="Gráfico plotado e salvo com sucesso!")
+  
         except ValueError:
             messagebox.showerror("Erro", "Valores inválidos")
