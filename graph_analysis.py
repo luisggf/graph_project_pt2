@@ -102,7 +102,6 @@ class Weighted_Graph:
             if chosen_parties:
                 politicians_df = politicians_df[politicians_df['Party'].isin(chosen_parties)]
 
-            # Filtrar linhas do graph_df com base nos deputados presentes no politicians_df
             common_politicians = politicians_df['Politician'].tolist()
             graph_df = graph_df[(graph_df['Source'].isin(common_politicians)) & (graph_df['Target'].isin(common_politicians))]
 
@@ -180,7 +179,6 @@ class Weighted_Graph:
         plt.title(f'Medida de Centralidade para Deputados dos partidos {parties},  ({year}, Threshold: {threshold})')
         plt.xticks(rotation=45, ha='right')
         plt.tight_layout()
-        # caso deseje que figura seja salva modifique o diretório caso queira salvar em outro lugar e descomente o trecho
         plt.savefig(f'./graphics/centralidade_grafico_{year}_{parties}.pdf')
         plt.show()
 
