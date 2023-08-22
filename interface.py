@@ -9,7 +9,6 @@ class GraphInterface:
         self.root = root
         self.root.title("Análise de Grafos")
         
-        # Estilo para rótulos
         label_style = {"font": ("Helvetica", 8, "bold")}
 
         party_colors = set_dict_colours()
@@ -24,6 +23,7 @@ class GraphInterface:
         self.year_entry = tk.Entry(root)
         self.year_entry.pack(anchor=tk.W, padx=5)
 
+        # implementação de multiseleção de partidos
         self.parties_label = tk.Label(root, text="Partidos:")
         self.parties_label.pack(anchor=tk.W, padx=5, pady=(15,5))
 
@@ -48,9 +48,9 @@ class GraphInterface:
             column_index += 1
             if column_index >= num_columns:
                 column_index = 0
-                        
+        
         self.threshold_label = tk.Label(root, text="Threshold (0 a 1):")
-        self.threshold_label.pack(anchor=tk.W, padx=5, pady=(15,0))
+        self.threshold_label.pack(anchor=tk.W, padx=5, pady=(20,0))
 
         self.threshold_frame = tk.Frame(root)
         self.threshold_frame.pack(anchor=tk.W, padx=5)
@@ -64,7 +64,7 @@ class GraphInterface:
 
         self.centrality_var = tk.IntVar()
         self.centrality_checkbutton = tk.Checkbutton(root, text="Centrality", variable=self.centrality_var, compound=tk.LEFT, **label_style)
-        self.centrality_checkbutton.pack(anchor=tk.W, padx=5)
+        self.centrality_checkbutton.pack(anchor=tk.W, padx=5, pady=(10,0))
 
         self.heatmap_var = tk.IntVar()
         self.heatmap_checkbutton = tk.Checkbutton(root, text="HeatMap", variable=self.heatmap_var, compound=tk.LEFT, **label_style)
@@ -76,7 +76,7 @@ class GraphInterface:
 
         plot_button_style = {"font": ("Helvetica", 14, "bold"), "bg": "#4CAF50", "fg": "white"}
         self.plot_button = tk.Button(root, text="Plotar", command=self.plot_graph, **plot_button_style)
-        self.plot_button.pack(anchor=tk.W, padx=5, pady=8)
+        self.plot_button.pack(anchor=tk.W, padx=5, pady=(15,0))
         self.success_label = tk.Label(root, text="", fg="green", **label_style)
         self.success_label.pack(anchor=tk.W, padx=5)
 
