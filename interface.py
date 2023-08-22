@@ -43,6 +43,7 @@ class GraphInterface:
         for party, color in party_colors.items():
             button = tk.Button(columns[column_index], text=party, command=lambda p=party: self.toggle_party(p, party_colors), **label_style)
             button.pack(anchor=tk.W, padx=5, pady=2)
+            button.config(width=12)  
             self.party_buttons[party] = button
 
             column_index += 1
