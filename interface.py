@@ -121,6 +121,11 @@ class GraphInterface:
             
             df1, df2 = graph.read_dataframes_by_year(year, parties)
 
+            for party in parties:
+                if party not in df2['Party'].unique():
+                    messagebox.showerror("Erro", f"Partido {party} não existe para o ano: {year}")
+                    return
+
             graph_normalized = graph.set_normalized_graph(df1, df2)
             graph_normalized_copy = graph_normalized.create_copy()
             graph_threshold = graph_normalized_copy.apply_threshold(threshold)
@@ -138,7 +143,6 @@ class GraphInterface:
             messagebox.showerror("Erro", "Valores inválidos")
 
     
-
     def show_threshold_tooltip(self):
         tooltip_text = (
             "Threshold é um tipo de filtragem que remove valores de peso entre deputados\n"
