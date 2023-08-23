@@ -120,11 +120,23 @@ class GraphInterface:
                 return
             
             df1, df2 = graph.read_dataframes_by_year(year, parties)
-
+            invalid_parties = []
             for party in parties:
                 if party not in df2['Party'].unique():
-                    messagebox.showerror("Erro", f"Partido {party} não existe para o ano: {year}")
+                    invalid_parties.append(party)
+                    
+            if invalid_parties:
+                if len(invalid_parties) == len(parties):
+                    error_message = f"Os partidos {invalid_parties} não existem para o ano: {year}. Escolha partidos válidos."
+                    if len(parties) == 1:
+                        messagebox.showerror("Erro", error_message)
+                    else:
+                        messagebox.showwarning("Erro", error_message)
                     return
+                else:
+                    warning_message = f"Os partidos {invalid_parties} não existem para o ano: {year}. Esses partidos serão ignorados."
+                    messagebox.showwarning("Aviso", warning_message)
+                    parties = [party for party in parties if party not in invalid_parties]
 
             graph_normalized = graph.set_normalized_graph(df1, df2)
             graph_normalized_copy = graph_normalized.create_copy()
@@ -159,7 +171,7 @@ class GraphInterface:
         else:
             self.party_buttons[party]['relief'] = tk.SUNKEN
             self.party_buttons[party]['bg'] = party_colors[party]  # Set the original color
-
+    
 
     def get_selected_parties(self):
         selected_parties = [party for party, button in self.party_buttons.items() if button['relief'] == tk.SUNKEN]
