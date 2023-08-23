@@ -8,7 +8,6 @@ class GraphInterface:
     def __init__(self, root):
         self.root = root
         self.root.title("Análise de Grafos")
-        
         label_style = {"font": ("Helvetica", 8, "bold")}
 
         party_colors = set_dict_colours()
@@ -41,6 +40,7 @@ class GraphInterface:
 
         column_index = 0
         for party, color in party_colors.items():
+            
             button = tk.Button(columns[column_index], text=party, command=lambda p=party: self.toggle_party(p, party_colors), **label_style)
             button.pack(anchor=tk.W, padx=5, pady=2)
             button.config(width=12)  
@@ -88,7 +88,18 @@ class GraphInterface:
             graph_normalized = Weighted_Graph()
             graph_threshold = Weighted_Graph()
             
+            party_colors = set_dict_colours()
             parties = self.get_selected_parties()
+            # se nenhum partido foi selecionado, preenche com lista de 40 partidos
+            if not parties:
+                for party, color in party_colors.items():
+                    parties.append(party)
+
+            # se em parties tiver algum partido que não exista na lista estatica a remove 
+            # (muitos partidos foram renomeados ou nao existem mais)
+            for party in parties:
+                if party not in party_colors:
+                    parties.remove(party)
 
             year_str = self.year_entry.get()
             year = int(year_str)
@@ -109,6 +120,7 @@ class GraphInterface:
                 return
             
             df1, df2 = graph.read_dataframes_by_year(year, parties)
+
             graph_normalized = graph.set_normalized_graph(df1, df2)
             graph_normalized_copy = graph_normalized.create_copy()
             graph_threshold = graph_normalized_copy.apply_threshold(threshold)
@@ -124,6 +136,8 @@ class GraphInterface:
   
         except ValueError:
             messagebox.showerror("Erro", "Valores inválidos")
+
+    
 
     def show_threshold_tooltip(self):
         tooltip_text = (
@@ -146,3 +160,6 @@ class GraphInterface:
     def get_selected_parties(self):
         selected_parties = [party for party, button in self.party_buttons.items() if button['relief'] == tk.SUNKEN]
         return selected_parties
+    
+
+

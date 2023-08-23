@@ -179,6 +179,11 @@ class Weighted_Graph:
         plt.title(f'Medida de Centralidade para Deputados dos partidos {parties},  ({year}, Threshold: {threshold})')
         plt.xticks(rotation=45, ha='right')
         plt.tight_layout()
+        print(len(parties))
+        if len(parties) > 10:
+            plt.savefig(f'./graphics/centralidade_grafico_{year}_[].pdf')
+            plt.show()
+            return
         plt.savefig(f'./graphics/centralidade_grafico_{year}_{parties}.pdf')
         plt.show()
 
@@ -226,6 +231,10 @@ class Weighted_Graph:
         
         plt.title(f'HeatMap dos Pesos Normalizados dos Partidos {parties}, Ano {year}')
         plt.tight_layout()
+        if len(parties) > 10:
+            plt.savefig(f'./graphics/heatmap_{year}_[].pdf')
+            plt.show()
+            return
         plt.savefig(f'./graphics/heatmap_{year}_{parties}.pdf')
         plt.show()
 
@@ -265,6 +274,10 @@ class Weighted_Graph:
         plt.title('Visualização do Grafo Ponderado de Relações de Votos entre Deputados por Partido')
         plt.legend(handles=legend_labels, loc='upper right')
         plt.tight_layout()
+        if len(parties) > 10:
+            plt.savefig(f'./graphics/grafo_{year}_[].pdf')
+            plt.show()
+            return
         plt.savefig(f'./graphics/grafo_{year}_{parties}.pdf')
         plt.show()
 
@@ -275,7 +288,6 @@ class Weighted_Graph:
         return copied_graph
 
 
-# dicionário para cobrir todos partidos possiveis e poder plotar o grafo
 def set_dict_colours():
     party_colors = {
         'MDB': generate_random_color(),
@@ -307,7 +319,17 @@ def set_dict_colours():
         'REDE': generate_random_color(),
         'PMB': generate_random_color(),
         'UP': generate_random_color(),
-        'UNIÃO': generate_random_color()
+        'UNIÃO': generate_random_color(),
+        'PSC': generate_random_color(),
+        'PROS': generate_random_color(),
+        'S.PART.': generate_random_color(),
+        'PSL': generate_random_color(),
+        'DEM': generate_random_color(),
+        'PRB': generate_random_color(),
+        'PHS': generate_random_color(),
+        'PR': generate_random_color(),
+        'PPS': generate_random_color(),
+        'PMDB': generate_random_color()
     }
     return party_colors
 
